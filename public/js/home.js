@@ -68,13 +68,14 @@ $(function() {
          *
          * */
         var $jobdetailstable = $('#jobdetailstable');
+
         var $parmstable = $('#parmstable');
         var $notificationstable = $('#notificationstable');
         var $notFoundDiv = $("#NotFoundDiv");
         /*
          * Event handler bindings
          * */
-        $("#btn").click(function() {
+        $("#PullDataSubmitBtn").click(function() {
             var start = 1991;
             var end = 1993;
             var allMovies = [];
@@ -105,6 +106,7 @@ $(function() {
          * Business Functions
          *
          * **/
+
         /**
          * Business logic start
          * */
@@ -160,6 +162,12 @@ $(function() {
          *
          * Utilities
          * */
+        function makeYearPicker() {
+            for (i = new Date().getFullYear(); i > 1900; i--) {
+                $('.yearpicker').append($('<option />').val(i).html(i));
+            }
+        }
+
         function createDatatableFromJSON(tableID, json) {
             var $table = $(tableID);
             if ($.fn.DataTable.isDataTable(tableID)) {
@@ -189,7 +197,7 @@ $(function() {
         /*
          * Onload events
          * **/
-
+        makeYearPicker();
 
     }
 
