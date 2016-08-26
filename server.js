@@ -32,19 +32,24 @@ MongoClient.connect(process.env.CONN_STRING, (err, database) => {
 
 app.use(express.static('public'));
 app.get('/', (req, res) => {
-  console.log(process.env.CONN_STRING); 
-
-  res.sendFile(__dirname + '/home/index.html')
+  console.log(process.env.CONN_STRING);
+  res.send("HomePageHere!");
   // Note: __dirname is the path to your current working directory. Try logging it and see what you get!
   // Mine was '/Users/zellwk/Projects/demo-repos/crud-express-mongo' for this app.
-})
+});
+app.get('/scraper', (req, res) => {
+  console.log(process.env.CONN_STRING);
+  res.sendFile(__dirname + '/scraper/index.html')
+  // Note: __dirname is the path to your current working directory. Try logging it and see what you get!
+  // Mine was '/Users/zellwk/Projects/demo-repos/crud-express-mongo' for this app.
+});
 app.get('/movies', (req, res) => {
 
   res.sendFile(__dirname + '/view/movies.html')
   // Note: __dirname is the path to your current working directory. Try logging it and see what you get!
   // Mine was '/Users/zellwk/Projects/demo-repos/crud-express-mongo' for this app.
 })
-app.post('/movies', (req, res) => {
+app.post('/scraper/save', (req, res) => {
 
   console.log(req.body);
   db.collection('movies').drop();
@@ -52,7 +57,7 @@ app.post('/movies', (req, res) => {
     if (err) return console.log(err)
 
     console.log('saved to database')
-    res.redirect('/movies')
+    res.send({status:"success"});
   })
 
   // Note: __dirname is the path to your current working directory. Try logging it and see what you get!

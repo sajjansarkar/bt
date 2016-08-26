@@ -67,23 +67,24 @@ $(function() {
          * Cache
          *
          * */
-        var $jobdetailstable = $('#jobdetailstable');
-
-        var $parmstable = $('#parmstable');
-        var $notificationstable = $('#notificationstable');
-        var $notFoundDiv = $("#NotFoundDiv");
+        var $loading = $('#loading');
+        var $ProgressBar = $('#ProgressBar');
+        var $start = $('#start');
+        var $end = $("#end");
+        var $LoaderWrapper = $("#LoaderWrapper");
         /*
          * Event handler bindings
          * */
         $("#PullDataSubmitBtn").click(function() {
-            var start = 1991;
-            var end = 1993;
+            $LoaderWrapper.show();
+            var start = $start.val();
+            var end = $end.val();
             var allMovies = [];
             loadMovieCache(start, end, allMovies).then(function() {
                 console.log('Full Object loaded!' + allMovies);
                 var req = {
                     method: "POST",
-                    url: "/movies",
+                    url: "/scraper/save",
                     data: $.param({
                         start: start,
                         end: end,
@@ -93,8 +94,9 @@ $(function() {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
                 };
-
+                setLoaderStatus("Saving dump to DB..",95);
                 $.ajax(req).done(function(data) {
+                    setLoaderStatus("Done!",100);
                     console.log(data);
                 });
             });
@@ -111,20 +113,23 @@ $(function() {
          * Business logic start
          * */
         function loadMovies(start, end, allMovies) {
+
             var defer = $.Deferred();
 
             function after(movies, status, xhr) {
                 console.log('year:' + start + ', no of movies:' + movies.length);
                 $.merge(allMovies, movies);
                 start++;
-                if (start < end)
+                if (start <= end) {
+                    setLoaderStatus("Loading movies for year:" + start, (start * 100 / end));
                     cinemalytics.getMoviesByYear(start).done(after);
-                else {
+                } else {
                     console.log("Dong getting movies.");
                     defer.resolve("true");
                     //loadSongs(allMovies);
                 }
             }
+            setLoaderStatus("Loading movies for year:" + start, (start * 100 / end));
             cinemalytics.getMoviesByYear(start).done(after);
             return defer;
         }
@@ -141,13 +146,15 @@ $(function() {
                 console.log('id:' + currMovie.Id + ',name:' + currMovie.Title + ', no of songs:' + songs.length);
                 currMovie.songs = songs;
                 start++;
-                if (start < end)
+                if (start < end) {
+                    setLoaderStatus("Loading songs for movie:" + currMovie.Title, (start * 100 / end));
                     cinemalytics.getSongsByMovieId(currMovie.Id).done(after);
-                else {
+                } else {
                     console.log("Dong getting songs.");
                     defer.resolve("true");
                 }
             }
+            setLoaderStatus("Loading songs for movie:" + allMovies[start].Title, (start * 100 / end));
             cinemalytics.getSongsByMovieId(allMovies[start].Id).done(after);
             return defer;
         }
@@ -194,11 +201,19 @@ $(function() {
                 });
             }
         }
+
+        function setLoaderStatus(msg, percentcomplete) {
+            var spinner = '<i class="fa fa-spinner fa-spin fa-pulse"></i>';
+            if (percentcomplete < 100)
+                msg = spinner + msg;
+            $loading.html(msg);
+            $ProgressBar.val(percentcomplete);
+        }
         /*
          * Onload events
          * **/
         makeYearPicker();
-
+        $LoaderWrapper.hide();
     }
 
 });
