@@ -117,6 +117,8 @@ $(function() {
             var defer = $.Deferred();
 
             function after(movies, status, xhr) {
+              if (typeof(movies) == "undefined")
+                movies=[];
                 console.log('year:' + start + ', no of movies:' + movies.length);
                 $.merge(allMovies, movies);
                 start++;
