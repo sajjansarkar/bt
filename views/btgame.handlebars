@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        GUID
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <style>
+        body {
+            BACKGROUND-COLOR: ORANGE;
+            margin-top: 10px;
+        }
+
+        .poster {
+            height: 440px;
+            margin-left: 8px;
+            margin-top: 3px;
+            border-radius: 10px;
+        }
+
+        .answer {
+            background-color: gold;
+            border-radius: 0px;
+            padding: 3px;
+            margin-left: 10px;
+            border-radius: 10px;
+            width: 95%;
+            HEIGHT: 60PX;
+            padding-top: 14px;
+            PADDING-LEFT: 5PX;
+            font-weight: bold;
+            font-size: 19PX;
+        }
+
+        #cardcontainer {
+            WIDTH: 100%;
+        }
+
+        #ButtonBar .btn {
+            width: 30%;
+            font-size: 20px !important;
+            font-weight: bold !important;
+        }
+
+        #ButtonBar {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        #PointsSection,
+        #TimeLeftSection {
+            font-size: 40px !important;
+            font-weight: bold !important;
+        }
+
+        .txt-right {
+            text-align: right;
+        }
+
+        .txt-left {
+            text-align: left;
+        }
+
+        .txt-center {
+            text-align: center;
+        }
+
+        .txt-small {
+            font-size: 15px
+        }
+        .full-width{
+          width: 100%;
+        }
+    </style>
+
+</head>
+
+<body class="container-fluid">
+    <div id="gamecontainer" style="display:none;">
+        <div id="cardcontainer"></div>
+        <div id="ButtonBar">
+            <button id="btnYes" class="cardcontrol btn btn-success" data-action="CORRECT">Yes!</button>
+            <button id="btnNo" class="cardcontrol btn btn-danger" data-action="WRONG">Oops</button>
+            <button id="btnPass" class="cardcontrol btn btn-primary" data-action="PASS">Pass</button>
+        </div>
+        <div id="GameDataBar row">
+            <div id="PointsSection" class="txt-left col-xs-6">15<span class="txt-small">pts</span></div>
+            <div id="TimeLeftSection" class="txt-right col-xs-6">30<span class="txt-small">s</span></div>
+        </div>
+    </div>
+    <button id="btnStartGame" class="btn btn-success full-width" style="display:none;">START GAME</button>
+    <script id="card-template" type="text/x-handlebars-template">
+        <div class="card">
+            <div class="answer">\{{Title}}</div>
+            <div class="forbidden txt-center">
+                <img class="poster" src="\{{PosterPath}}">
+            </div>
+        </div>
+    </script>
+    <script>
+        var GLOBAL = {};
+        GLOBAL.DECADE = {{this.decade}};
+    </script>
+
+    <script src='https://code.jquery.com/jquery-2.2.2.min.js'></script>
+    <script src='/js/btapi.js'></script>
+    <script src="../js/CardStack.js"></script>
+    <script src="../js/btaboo.js"></script>
+</body>
+
+</html>
